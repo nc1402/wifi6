@@ -1,0 +1,577 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Chọn Wi-Fi 5 hay Wi-Fi 6</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one long column. Each section pairs a plain-language idea with a small demo the reader can move.
+   Teal = Wi-Fi 5 (AC), amber = Wi-Fi 6 (AX), violet only for BSS "colors". */
+:root{
+  --bg:#F1F6F6; --surface:#FFFFFF; --ink:#0D2A31; --muted:#46626B; --line:#D2E0E2; --cell:#DCE7E9;
+  --ac:#0B7C86; --ac-soft:#D7EEF0; --on-ac:#FFFFFF;
+  --ax:#C45C00; --ax-soft:#FCE8D0; --on-ax:#FFFFFF;
+  --vio:#5B3FD6; --vio-soft:#E6E1FA;
+  --ok:#17794A; --warn:#9A6200;
+  --f-display:"Bricolage Grotesque","Be Vietnam Pro",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#09171C; --surface:#10262D; --ink:#E6F2F3; --muted:#9DB6BC; --line:#22414A; --cell:#1D3A43;
+  --ac:#3CC4D0; --ac-soft:#12343A; --on-ac:#04252A;
+  --ax:#FFA33A; --ax-soft:#3A2812; --on-ax:#241200;
+  --vio:#A592FF; --vio-soft:#261F4A; --ok:#5BD99A; --warn:#F2B64D; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#09171C; --surface:#10262D; --ink:#E6F2F3; --muted:#9DB6BC; --line:#22414A; --cell:#1D3A43;
+  --ac:#3CC4D0; --ac-soft:#12343A; --on-ac:#04252A;
+  --ax:#FFA33A; --ax-soft:#3A2812; --on-ax:#241200;
+  --vio:#A592FF; --vio-soft:#261F4A; --ok:#5BD99A; --warn:#F2B64D; color-scheme:dark;}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.65;padding-inline:16px}
+.wrap{max-width:1040px;margin-inline:auto}
+h1,h2,h3{font-family:var(--f-display);line-height:1.1;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.6rem,8vw,5rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.7rem,4.6vw,2.6rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.25rem;font-weight:700}
+p{margin:0;max-width:65ch}
+a{color:var(--ac)}
+.eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.ac{color:var(--ac)} .ax{color:var(--ax)}
+:focus-visible{outline:3px solid var(--ax);outline-offset:3px;border-radius:6px}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding-inline:16px}
+.nav .wrap{display:flex;gap:4px 18px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.nav a{white-space:nowrap;text-decoration:none;color:var(--muted);font-size:.9rem;font-weight:500;padding:4px 2px;border-bottom:2px solid transparent}
+.nav a:hover{color:var(--ink);border-color:var(--ax)}
+
+section{padding-block:72px 8px}
+.head{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
+.head p{color:var(--muted)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding-block:56px 24px}
+.hero .copy{display:flex;flex-direction:column;gap:22px;min-width:0}
+.hero .lead{font-size:1.15rem;color:var(--muted)}
+.quick{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.quick b{font-family:var(--f-display);font-size:1.05rem}
+.stage{display:flex;flex-direction:column;gap:14px;min-width:0}
+#heroCv{width:100%;max-width:440px;aspect-ratio:1;margin-inline:auto;display:block;border-radius:50%;background:var(--surface);border:1px solid var(--line)}
+.seg{display:inline-grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:999px;background:var(--surface);padding:4px;margin-inline:auto;max-width:100%}
+.seg button{font:inherit;font-weight:600;font-size:.95rem;border:0;background:transparent;color:var(--muted);padding:9px 18px;border-radius:999px;cursor:pointer;min-width:0}
+.seg button[aria-pressed="true"].b-ac{background:var(--ac);color:var(--on-ac)}
+.seg button[aria-pressed="true"].b-ax{background:var(--ax);color:var(--on-ax)}
+.cap{font-size:.88rem;color:var(--muted);text-align:center;margin-inline:auto}
+
+/* analogy */
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel.ac-p{border-top:6px solid var(--ac)}
+.panel.ax-p{border-top:6px solid var(--ax)}
+.panel .tag{font-family:var(--f-num);font-size:.85rem;font-weight:500}
+.panel svg{width:100%;height:auto;max-height:120px}
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:24px}
+.term{border:1px solid var(--line);border-radius:12px;padding:18px;background:var(--surface);display:flex;flex-direction:column;gap:8px;min-width:0;transition:transform .2s,border-color .2s}
+.term:hover{transform:translateY(-3px);border-color:var(--ax)}
+.term h3{font-size:1.05rem}
+.term .abbr{font-size:.74rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ax)}
+.term p{font-size:.94rem;color:var(--muted)}
+.term p b{color:var(--ink);font-weight:600}
+
+/* demo shell */
+.demo{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:22px;min-width:0}
+.ctrl{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center}
+.ctrl label{font-weight:600}
+input[type=range]{flex:1 1 220px;min-width:0;accent-color:var(--ax);height:32px}
+.val{font-family:var(--f-num);font-size:1.5rem;font-weight:500;min-width:3ch;text-align:right}
+.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:9px 16px;border-radius:10px;cursor:pointer}
+.btn:hover{border-color:var(--ax)}
+.lanes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.lane{display:flex;flex-direction:column;gap:12px;min-width:0}
+.lane h3{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.lane .grid{display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start;min-height:92px;padding:12px;border-radius:10px;background:var(--bg)}
+.cell{width:16px;height:16px;border-radius:4px;background:var(--cell);transition:background .15s,transform .15s}
+#acGrid .cell.done{background:var(--ac);transform:scale(1.08)}
+#axGrid .cell.done{background:var(--ax);transform:scale(1.08)}
+.stat{font-size:.92rem;color:var(--muted)}
+.stat b{font-family:var(--f-num);font-weight:500;font-size:1.4rem;color:var(--ink)}
+.verdict-line{padding:14px 16px;border-radius:10px;background:var(--ax-soft);font-weight:500}
+.note{font-size:.86rem;color:var(--muted)}
+
+/* bss */
+.bss-svg{width:100%;height:auto;display:block}
+.bss-svg .zoneA{fill:var(--ac-soft);stroke:var(--ac);stroke-width:2}
+.bss-svg .zoneB{fill:var(--vio-soft);stroke:var(--vio);stroke-width:2}
+.bss-svg .ap{stroke:var(--surface);stroke-width:3}
+.bss-svg .dev{fill:var(--muted)}
+.bss-svg text{font-family:var(--f-body);font-size:15px;font-weight:600;fill:var(--ink)}
+.link{stroke-width:3;stroke-dasharray:6 6;opacity:0}
+.link.a{stroke:var(--ac)} .link.b{stroke:var(--vio)}
+g[data-talk="1"] .link{opacity:1;animation:dash 0.6s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-12}}
+.wait-tag{font-size:13px;opacity:0}
+g[data-talk="0"] .wait-tag{opacity:1}
+.meters{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.meter{display:flex;flex-direction:column;gap:6px;min-width:0}
+.bar{height:12px;border-radius:6px;background:var(--bg);overflow:hidden}
+.bar i{display:block;height:100%;width:0;transition:width .5s}
+.bar.a i{background:var(--ac)} .bar.b i{background:var(--vio)}
+.sw{display:flex;align-items:center;gap:12px;font-weight:600}
+.sw input{width:22px;height:22px;accent-color:var(--vio)}
+
+/* myths */
+.myth{border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:10px}
+.myth summary{cursor:pointer;padding:16px 20px;font-weight:600;list-style:none;display:flex;gap:12px;justify-content:space-between;align-items:center}
+.myth summary::-webkit-details-marker{display:none}
+.myth summary::after{content:"+";font-family:var(--f-num);font-size:1.4rem;color:var(--ax);transition:transform .2s}
+.myth[open] summary::after{transform:rotate(45deg)}
+.myth div{padding:0 20px 18px;color:var(--muted)}
+.myth div b{color:var(--ink)}
+
+/* table */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.95rem}
+th,td{text-align:left;padding:14px 16px;vertical-align:top;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+th{font-family:var(--f-display);font-size:1rem}
+th.c-ac{color:var(--ac)} th.c-ax{color:var(--ax)}
+td:first-child{font-weight:600}
+td.mean{color:var(--muted)}
+
+/* advisor */
+.adv{display:grid;grid-template-columns:1.1fr .9fr;gap:24px}
+.form{display:flex;flex-direction:column;gap:20px;min-width:0}
+fieldset{border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;min-width:0}
+legend{font-weight:600;padding:0;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{border:1px solid var(--line);background:var(--bg);padding:8px 14px;border-radius:999px;cursor:pointer;font-size:.95rem}
+.chips input:checked+label{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips input:focus-visible+label{outline:3px solid var(--ax);outline-offset:2px}
+.row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.row .val{font-size:1.2rem}
+.checks{display:flex;flex-direction:column;gap:8px}
+.checks label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.checks input{width:20px;height:20px;margin-top:4px;accent-color:var(--ax);flex:none}
+.result{position:sticky;top:calc(env(safe-area-inset-top,0px) + 64px);align-self:start;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px;border:2px solid var(--line);background:var(--bg);min-width:0}
+.result[data-r="ac"]{border-color:var(--ac);background:var(--ac-soft)}
+.result[data-r="mid"]{border-color:var(--warn)}
+.result[data-r="ax"]{border-color:var(--ax);background:var(--ax-soft)}
+.result h3{font-size:1.7rem}
+.result ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;font-size:.95rem}
+.res-meta{font-family:var(--f-num);font-size:.88rem;color:var(--muted)}
+
+/* future + venues */
+.cards3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .yr{font-family:var(--f-num);font-size:.85rem;color:var(--muted)}
+.card p{color:var(--muted);font-size:.95rem}
+.card.now{border-color:var(--ax);border-width:2px}
+.takeaway{margin-top:20px;padding:18px 20px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+
+footer{padding-block:64px 56px;display:flex;flex-direction:column;gap:14px}
+footer ul{margin:0;padding-left:1.2em;font-size:.88rem;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.cta{margin-top:56px;padding:28px;border-radius:18px;background:var(--ink);color:var(--bg);display:flex;flex-direction:column;gap:10px}
+.cta h2{color:var(--bg)}
+.cta p{color:var(--bg);opacity:.85}
+
+@media (max-width:760px){
+  .hero{grid-template-columns:1fr;gap:28px;padding-block:36px 8px}
+  .lanes,.meters,.adv{grid-template-columns:1fr}
+  .result{position:static}
+  section{padding-block:56px 4px}
+  .demo{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<nav class="nav" aria-label="Mục lục"><div class="wrap">
+  <a href="#hieu">Khác nhau ở đâu</a><a href="#demo">Giờ cao điểm</a><a href="#nhieu">Hai điểm phát gần nhau</a><a href="#hieunham">Hiểu nhầm</a><a href="#sosanh">Bảng so sánh</a><a href="#chon">Chọn cho tôi</a><a href="#tuonglai">Wi-Fi 6E và 7</a>
+</div></nav>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="copy">
+    <span class="eyebrow">Hướng dẫn chọn bộ phát Wi-Fi cho quán, khách sạn, văn phòng</span>
+    <h1>Wi-Fi <span class="ac">5</span> hay Wi-Fi <span class="ax">6</span>?</h1>
+    <p class="lead">Wi-Fi AC là Wi-Fi 5. Wi-Fi AX là Wi-Fi 6. Trang này giải thích sự khác nhau bằng hình động, rồi giúp bạn chọn theo nhu cầu thật của mình. Bạn không cần biết kỹ thuật.</p>
+    <div class="quick">
+      <b>Trả lời ngắn</b>
+      <p>Nếu mỗi bộ phát chỉ có dưới khoảng 30 thiết bị dùng cùng lúc, Wi-Fi 5 vẫn ổn và rẻ hơn. Từ khoảng 40 thiết bị trở lên, hoặc có nhiều cuộc họp video, Wi-Fi 6 đáng tiền. Đây là quy tắc kinh nghiệm của các đơn vị triển khai, bạn sẽ thử nó ở phần "Chọn cho tôi".</p>
+    </div>
+  </div>
+  <div class="stage">
+    <canvas id="heroCv" width="880" height="880" role="img" aria-label="Hình động: một bộ phát Wi-Fi ở giữa phục vụ các thiết bị xung quanh"></canvas>
+    <div class="seg" role="group" aria-label="Chọn chuẩn Wi-Fi để xem">
+      <button class="b-ac" id="hAc" aria-pressed="false">Wi-Fi 5 (AC)</button>
+      <button class="b-ax" id="hAx" aria-pressed="true">Wi-Fi 6 (AX)</button>
+    </div>
+    <p class="cap" id="heroCap"></p>
+  </div>
+</header>
+
+<section id="hieu">
+  <div class="head">
+    <span class="eyebrow">Hiểu trong một phút</span>
+    <h2>Hai chuẩn này khác nhau ở đâu?</h2>
+    <p>Cả hai đều chạy tốt. Điểm khác chính là cách chia thời gian phát sóng cho nhiều thiết bị. Wi-Fi 6 không chỉ nhanh hơn. Nó phục vụ đông người tốt hơn.</p>
+  </div>
+  <div class="duo">
+    <div class="panel ac-p">
+      <span class="tag ac">WI-FI 5 · 802.11ac</span>
+      <h3>Một quầy, từng khách một</h3>
+      <svg viewBox="0 0 300 100" aria-hidden="true"><rect x="10" y="30" width="60" height="40" rx="8" fill="var(--ac)"/><g fill="var(--cell)"><circle cx="120" cy="50" r="12"/><circle cx="160" cy="50" r="12"/><circle cx="200" cy="50" r="12"/><circle cx="240" cy="50" r="12"/></g><circle cx="105" cy="50" r="12" fill="var(--ac)"/><path d="M75 50h14" stroke="var(--ac)" stroke-width="3"/></svg>
+      <p>Mỗi lượt, bộ phát chủ yếu làm việc với một thiết bị. Khi vắng thì rất nhanh. Khi đông, mọi người xếp hàng chờ tới lượt.</p>
+    </div>
+    <div class="panel ax-p">
+      <span class="tag ax">WI-FI 6 · 802.11ax</span>
+      <h3>Một quầy chia nhiều ô</h3>
+      <svg viewBox="0 0 300 100" aria-hidden="true"><rect x="10" y="30" width="60" height="40" rx="8" fill="var(--ax)"/><g fill="var(--ax)"><circle cx="105" cy="22" r="10"/><circle cx="105" cy="50" r="10"/><circle cx="105" cy="78" r="10"/><circle cx="135" cy="36" r="10"/></g><g fill="var(--cell)"><circle cx="175" cy="50" r="10"/><circle cx="205" cy="50" r="10"/><circle cx="235" cy="50" r="10"/><circle cx="265" cy="50" r="10"/></g><path d="M72 40L92 24M72 50h22M72 60L92 76" stroke="var(--ax)" stroke-width="3" fill="none"/></svg>
+      <p>Bộ phát chia kênh thành nhiều phần nhỏ và phục vụ nhiều thiết bị trong cùng một lượt. Hàng chờ ngắn hơn, nhất là khi các thiết bị chỉ gửi những gói dữ liệu nhỏ.</p>
+    </div>
+  </div>
+  <div class="terms">
+    <div class="term"><span class="abbr">OFDMA</span><h3>Chia kênh thành ô nhỏ</h3><p>Giống chia một xe tải thành nhiều ngăn, mỗi ngăn giao cho một nhà. <b>Có lợi khi:</b> nhiều thiết bị cùng gửi gói nhỏ, như tin nhắn, máy thanh toán, camera.</p></div>
+    <div class="term"><span class="abbr">MU-MIMO hai chiều</span><h3>Nói chuyện song song</h3><p>Wi-Fi 5 chỉ làm được ở chiều tải xuống, tối đa 4 luồng. Wi-Fi 6 làm được cả tải lên và tải xuống, tối đa 8 luồng. <b>Có lợi khi:</b> nhiều người họp video, vì hình của bạn gửi đi là tải lên.</p></div>
+    <div class="term"><span class="abbr">BSS Coloring</span><h3>Gắn màu cho tín hiệu</h3><p>Mỗi bộ phát gắn một "màu" lên tín hiệu của mình. Bộ phát bên cạnh thấy khác màu thì không phải nhường lời. <b>Có lợi khi:</b> đặt nhiều bộ phát gần nhau, hoặc hàng xóm cũng dùng Wi-Fi.</p></div>
+    <div class="term"><span class="abbr">TWT</span><h3>Hẹn giờ thức dậy</h3><p>Thiết bị hẹn lúc nào sẽ thức dậy để trao đổi dữ liệu, lúc khác thì ngủ. <b>Có lợi khi:</b> có nhiều cảm biến, khoá cửa chạy pin. Pin bền hơn và sóng bớt ồn.</p></div>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="head">
+    <span class="eyebrow">Thử tại chỗ</span>
+    <h2>Giờ cao điểm: ai phải đợi lâu hơn?</h2>
+    <p>Kéo thanh trượt để đổi số thiết bị cùng cần gửi dữ liệu. Mỗi ô vuông là một thiết bị. Ô đổi màu khi thiết bị được phục vụ xong.</p>
+  </div>
+  <div class="demo">
+    <div class="ctrl">
+      <label for="nDev">Số thiết bị cùng lúc</label>
+      <input id="nDev" type="range" min="1" max="60" value="24">
+      <span class="val" id="nDevOut">24</span>
+      <button class="btn" id="replay" type="button">Chạy lại</button>
+    </div>
+    <div class="lanes">
+      <div class="lane">
+        <h3 class="ac">Wi-Fi 5 <span class="stat">phục vụ <b id="acDone">0</b>/<span class="nTxt">24</span></span></h3>
+        <div class="grid" id="acGrid" aria-hidden="true"></div>
+        <div class="stat">Khách cuối cùng chờ: <b id="acTime">24</b> lượt</div>
+      </div>
+      <div class="lane">
+        <h3 class="ax">Wi-Fi 6 <span class="stat">phục vụ <b id="axDone">0</b>/<span class="nTxt">24</span></span></h3>
+        <div class="grid" id="axGrid" aria-hidden="true"></div>
+        <div class="stat">Khách cuối cùng chờ: <b id="axTime">6</b> lượt</div>
+      </div>
+    </div>
+    <div class="verdict-line" id="demoSay" aria-live="polite"></div>
+    <p class="note">Mô hình đơn giản hoá để dễ hình dung. Wi-Fi 6 được tính phục vụ 4 thiết bị mỗi lượt, khớp với mức giảm độ trễ khoảng 75% mà Wi-Fi Alliance nêu cho mạng đông. Thực tế phụ thuộc vào thiết bị và môi trường. Khi chỉ có 1 đến 2 thiết bị, hai chuẩn gần như giống nhau.</p>
+  </div>
+</section>
+
+<section id="nhieu">
+  <div class="head">
+    <span class="eyebrow">Khi có nhiều bộ phát</span>
+    <h2>Hai bộ phát đặt gần nhau</h2>
+    <p>Hai tầng khách sạn, hai quán sát vách, hay hai bộ phát trong văn phòng lớn thường nghe thấy nhau. Hãy bật và tắt BSS Coloring để xem điều gì thay đổi.</p>
+  </div>
+  <div class="demo">
+    <svg class="bss-svg" viewBox="0 0 600 270" role="img" aria-label="Hai bộ phát Wi-Fi có vùng phủ sóng chồng nhau">
+      <circle class="zoneA" cx="215" cy="125" r="115" fill-opacity=".75"/>
+      <circle class="zoneB" cx="385" cy="125" r="115" fill-opacity=".75"/>
+      <g id="gA" data-talk="1">
+        <g class="dev"><circle cx="130" cy="70" r="9"/><circle cx="120" cy="150" r="9"/><circle cx="195" cy="205" r="9"/></g>
+        <g><line class="link a" x1="215" y1="125" x2="130" y2="70"/><line class="link a" x1="215" y1="125" x2="120" y2="150"/><line class="link a" x1="215" y1="125" x2="195" y2="205"/></g>
+        <circle class="ap" cx="215" cy="125" r="18" fill="var(--ac)"/>
+        <text x="215" y="30" text-anchor="middle">Bộ phát A</text>
+        <text class="wait-tag" x="215" y="258" text-anchor="middle">đang nhường lời</text>
+      </g>
+      <g id="gB" data-talk="0">
+        <g class="dev"><circle cx="470" cy="70" r="9"/><circle cx="480" cy="150" r="9"/><circle cx="405" cy="205" r="9"/></g>
+        <g><line class="link b" x1="385" y1="125" x2="470" y2="70"/><line class="link b" x1="385" y1="125" x2="480" y2="150"/><line class="link b" x1="385" y1="125" x2="405" y2="205"/></g>
+        <circle class="ap" cx="385" cy="125" r="18" fill="var(--vio)"/>
+        <text x="385" y="30" text-anchor="middle">Bộ phát B</text>
+        <text class="wait-tag" x="385" y="258" text-anchor="middle">đang nhường lời</text>
+      </g>
+    </svg>
+    <label class="sw" for="bssTgl"><input type="checkbox" id="bssTgl"> Bật BSS Coloring (Wi-Fi 6)</label>
+    <div class="meters">
+      <div class="meter"><span class="stat">Bộ phát A đã gửi: <b id="sentA">0</b> gói</span><div class="bar a"><i id="barA"></i></div></div>
+      <div class="meter"><span class="stat">Bộ phát B đã gửi: <b id="sentB">0</b> gói</span><div class="bar b"><i id="barB"></i></div></div>
+    </div>
+    <div class="verdict-line" id="bssSay" aria-live="polite"></div>
+    <p class="note">Minh hoạ ý tưởng. Khi tắt, hai bộ phát nghe thấy nhau nên thay phiên. Khi bật, mỗi bộ phát nhận ra tín hiệu khác màu của hàng xóm và có thể phát cùng lúc. Mức cải thiện thực tế phụ thuộc cách đặt bộ phát và cường độ tín hiệu.</p>
+  </div>
+</section>
+
+<section id="hieunham">
+  <div class="head">
+    <span class="eyebrow">Trước khi bỏ tiền</span>
+    <h2>Những điều dễ hiểu nhầm</h2>
+    <p>Bấm vào từng dòng để đọc.</p>
+  </div>
+  <details class="myth"><summary>"Mua Wi-Fi 6 thì điện thoại cũ của khách cũng nhanh hơn"</summary><div><b>Không.</b> Thiết bị chỉ hỗ trợ Wi-Fi 5 vẫn kết nối ở tốc độ Wi-Fi 5 khi vào bộ phát Wi-Fi 6. Điều thay đổi là sóng bớt tắc khi đông người, vì bộ phát xử lý đám đông tốt hơn. Muốn hưởng đủ lợi ích, cần nhiều thiết bị của khách đã hỗ trợ Wi-Fi 6.</div></details>
+  <details class="myth"><summary>"Wi-Fi 6 làm Internet nhanh hơn"</summary><div><b>Không vượt được gói cước.</b> Nếu đường truyền Internet của bạn là 100 Mbps thì dù bộ phát tốt đến đâu, khách cũng không vượt quá mức đó. Dưới khoảng 30 thiết bị mỗi bộ phát, nút thắt thường là đường truyền chứ không phải chuẩn Wi-Fi.</div></details>
+  <details class="myth"><summary>"9.6 Gbps nghĩa là tôi có tốc độ 9.6 Gbps"</summary><div><b>Đó là con số lý thuyết</b> trong điều kiện lý tưởng, với thiết bị nhiều ăng-ten và rất gần bộ phát. Điện thoại và laptop thông thường đạt thấp hơn nhiều. Hãy xem tốc độ này như chỉ số so sánh, đừng xem như cam kết.</div></details>
+  <details class="myth"><summary>"Phải thay hết bộ phát một lần"</summary><div><b>Không cần.</b> Bộ phát Wi-Fi 6 vẫn phục vụ thiết bị Wi-Fi 5, Wi-Fi 4 và cũ hơn. Bạn có thể nâng cấp dần, bắt đầu từ khu vực đông nhất như sảnh, phòng họp hoặc khu ăn uống.</div></details>
+  <details class="myth"><summary>"Wi-Fi 6 chỉ có lợi về tốc độ"</summary><div><b>Còn thêm vài điều.</b> Thiết bị Wi-Fi 6 được chứng nhận phải hỗ trợ bảo mật WPA3. Tính năng TWT giúp thiết bị chạy pin ngủ lâu hơn. Số bộ phát cần lắp cũng có thể ít đi ở nơi rất đông thiết bị.</div></details>
+</section>
+
+<section id="sosanh">
+  <div class="head">
+    <span class="eyebrow">Tất cả trong một bảng</span>
+    <h2>So sánh Wi-Fi 5 và Wi-Fi 6</h2>
+    <p>Cột bên phải dịch từng dòng sang ngôn ngữ thường ngày.</p>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Tiêu chí</th><th class="c-ac">Wi-Fi 5 (AC)</th><th class="c-ax">Wi-Fi 6 (AX)</th><th>Nghĩa là gì</th></tr></thead>
+    <tbody>
+      <tr><td>Băng tần</td><td>5 GHz</td><td>2.4 GHz và 5 GHz</td><td class="mean">Chuẩn AC chỉ nói về băng 5 GHz. Bộ phát AC thường có thêm băng 2.4 GHz chạy chuẩn cũ hơn.</td></tr>
+      <tr><td>Tốc độ tối đa lý thuyết</td><td>khoảng 3.5 Gbps</td><td>9.6 Gbps</td><td class="mean">Con số phòng thí nghiệm. Thực tế thấp hơn nhiều.</td></tr>
+      <tr><td>Cách chia kênh</td><td>OFDM, một thiết bị mỗi lượt</td><td>OFDMA, nhiều thiết bị mỗi lượt</td><td class="mean">Wi-Fi 6 ít bắt khách xếp hàng.</td></tr>
+      <tr><td>MU-MIMO</td><td>Chỉ tải xuống, tối đa 4 luồng</td><td>Tải lên và xuống, tối đa 8 luồng</td><td class="mean">Họp video mượt hơn khi nhiều người cùng gọi.</td></tr>
+      <tr><td>Giảm nhiễu giữa các bộ phát</td><td>Không có</td><td>BSS Coloring</td><td class="mean">Nhiều bộ phát đặt gần nhau ít cản trở nhau.</td></tr>
+      <tr><td>Tiết kiệm pin thiết bị</td><td>Không có</td><td>TWT</td><td class="mean">Cảm biến và khoá cửa chạy pin bền hơn.</td></tr>
+      <tr><td>Bảo mật</td><td>WPA2 phổ biến</td><td>Thiết bị chứng nhận phải hỗ trợ WPA3</td><td class="mean">Mạng vẫn có thể giữ WPA2 để máy cũ kết nối được.</td></tr>
+      <tr><td>Số thiết bị mỗi bộ phát (kinh nghiệm)</td><td>Thoải mái dưới khoảng 30, giảm dần từ 30 đến 40</td><td>Giữ tốt đến khoảng 60 đến 75 hoặc hơn</td><td class="mean">Theo một đơn vị triển khai mạng cho khách sạn. Đây là kinh nghiệm, không phải tiêu chuẩn.</td></tr>
+      <tr><td>Giá bộ phát</td><td>Thấp hơn</td><td>Cao hơn khoảng 30 đến 50%</td><td class="mean">Theo cùng đơn vị đó. Giá thật tuỳ hãng và thời điểm, hãy hỏi báo giá.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="chon">
+  <div class="head">
+    <span class="eyebrow">Bài tập nhỏ</span>
+    <h2>Chọn cho tôi</h2>
+    <p>Trả lời vài câu về nơi của bạn. Kết quả đổi ngay khi bạn thay câu trả lời.</p>
+  </div>
+  <div class="demo adv">
+    <div class="form">
+      <fieldset>
+        <legend>Nơi của bạn là</legend>
+        <div class="chips">
+          <input type="radio" name="venue" id="v1" value="fnb" checked><label for="v1">Quán cà phê, nhà hàng</label>
+          <input type="radio" name="venue" id="v2" value="hotel"><label for="v2">Khách sạn</label>
+          <input type="radio" name="venue" id="v3" value="office"><label for="v3">Văn phòng</label>
+          <input type="radio" name="venue" id="v4" value="shop"><label for="v4">Cửa hàng nhỏ</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Giờ đông nhất, tổng số thiết bị dùng cùng lúc</legend>
+        <div class="row"><input id="qTotal" type="range" min="5" max="400" step="5" value="80"><span class="val" id="qTotalOut">80</span></div>
+      </fieldset>
+      <fieldset>
+        <legend>Số bộ phát dự định lắp</legend>
+        <div class="row"><input id="qAp" type="range" min="1" max="20" value="3"><span class="val" id="qApOut">3</span></div>
+      </fieldset>
+      <fieldset>
+        <legend>Thêm thông tin</legend>
+        <div class="checks">
+          <label for="qVideo"><input type="checkbox" id="qVideo"><span>Thường có họp hoặc gọi video</span></label>
+          <label for="qIot"><input type="checkbox" id="qIot"><span>Nhiều camera, khoá cửa, cảm biến, máy thanh toán</span></label>
+          <label for="qLong"><input type="checkbox" id="qLong"><span>Muốn dùng hạ tầng này từ 5 năm trở lên</span></label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Ngân sách</legend>
+        <div class="chips">
+          <input type="radio" name="budget" id="b1" value="tight"><label for="b1">Rất chặt</label>
+          <input type="radio" name="budget" id="b2" value="mid" checked><label for="b2">Vừa phải</label>
+          <input type="radio" name="budget" id="b3" value="flex"><label for="b3">Thoải mái</label>
+        </div>
+      </fieldset>
+    </div>
+    <div class="result" id="result" data-r="mid" aria-live="polite">
+      <span class="eyebrow">Gợi ý cho bạn</span>
+      <h3 id="rTitle"></h3>
+      <div class="res-meta" id="rMeta"></div>
+      <ul id="rWhy"></ul>
+      <p class="note">Quy tắc kinh nghiệm từ các đơn vị triển khai, không phải tiêu chuẩn. Hãy khảo sát thực tế và xin báo giá trước khi mua. Số bộ phát tối thiểu chưa tính diện tích phủ sóng, có thể cần nhiều hơn.</p>
+    </div>
+  </div>
+
+  <div class="head" style="margin-top:48px">
+    <h2>Mỗi loại địa điểm thường chọn gì</h2>
+  </div>
+  <div class="cards3">
+    <div class="card"><h3>Quán cà phê, nhà hàng</h3><p>Khách dùng điện thoại, máy thanh toán, camera. Quán nhỏ với 1 đến 2 bộ phát thường dùng Wi-Fi 5 là đủ. Quán đông, có giờ cao điểm dày đặc nên nghiêng về Wi-Fi 6.</p></div>
+    <div class="card"><h3>Khách sạn</h3><p>Nhiều phòng, nhiều thiết bị thông minh như TV, khoá cửa, nhiệt kế, và khách đi công tác họp video cùng lúc. Wi-Fi 6 thường hợp lý hơn.</p></div>
+    <div class="card"><h3>Văn phòng</h3><p>Nếu họp video nhiều, chọn Wi-Fi 6. Nếu dưới khoảng 100 thiết bị toàn văn phòng và ít họp video dày, chênh lệch giữa hai chuẩn khó nhận ra.</p></div>
+    <div class="card"><h3>Cửa hàng nhỏ</h3><p>Ít thiết bị, ít nhu cầu nặng. Wi-Fi 5 hoặc Wi-Fi 6 bản giá tốt đều dùng được. Hãy so giá thật ở thời điểm mua.</p></div>
+  </div>
+</section>
+
+<section id="tuonglai">
+  <div class="head">
+    <span class="eyebrow">Nhìn xa hơn</span>
+    <h2>Còn Wi-Fi 6E và Wi-Fi 7 thì sao?</h2>
+    <p>Bài gốc nhắc đến hạ tầng 3 đến 5 năm tới. Dưới đây là bức tranh hiện tại.</p>
+  </div>
+  <div class="cards3">
+    <div class="card now"><span class="yr">Điểm cân bằng hiện nay</span><h3>Wi-Fi 6</h3><p>Hiệu năng tốt khi đông người, thiết bị khách đã phổ biến, giá bộ phát đã chín muồi. Nhiều đơn vị triển khai vẫn xem đây là lựa chọn hợp lý cho đa số văn phòng và cửa hàng.</p></div>
+    <div class="card"><span class="yr">Thêm băng 6 GHz</span><h3>Wi-Fi 6E</h3><p>Cùng công nghệ với Wi-Fi 6, cộng thêm băng 6 GHz thoáng và ít nhiễu. Chỉ thiết bị hỗ trợ 6E mới dùng được băng này. Một số nguồn ghi nhận 6E đang bị bỏ qua để lên thẳng Wi-Fi 7.</p></div>
+    <div class="card"><span class="yr">Thế hệ mới nhất</span><h3>Wi-Fi 7</h3><p>Kênh rộng 320 MHz, kết nối nhiều băng cùng lúc (MLO), tốc độ lý thuyết tới 46 Gbps. Một báo cáo trích dẫn Ookla cho biết khoảng 7% mạng được đo tại Mỹ đã dùng Wi-Fi 7 trong quý 1 năm 2026.</p></div>
+  </div>
+  <div class="takeaway"><b>Với câu hỏi "3 đến 5 năm":</b> Wi-Fi 6 vẫn đủ cho phần lớn nơi trong khoảng thời gian đó. Nếu ngân sách thoải mái và bạn định dùng hơn 5 năm, hãy xin thêm báo giá Wi-Fi 7 để so sánh.</div>
+
+  <div class="cta">
+    <h2>Còn bạn thì sao?</h2>
+    <p>Nhu cầu thật của khách hàng quyết định, hay cứ Wi-Fi 6 cho yên tâm? Hãy đếm số thiết bị giờ cao điểm trên mỗi bộ phát trước, rồi quyết định.</p>
+  </div>
+</section>
+
+<footer>
+  <span class="eyebrow">Nguồn tham khảo</span>
+  <ul>
+    <li><a href="https://www.tp-link.com/us/blog/2479/wi-fi-5-vs-wi-fi-6-what-s-different-and-is-it-worth-upgrading-/" target="_blank" rel="noopener">TP-Link: Wi-Fi 5 vs. Wi-Fi 6, what's different</a></li>
+    <li><a href="https://www.techtarget.com/searchnetworking/answer/Whats-the-difference-between-OFDMA-vs-MU-MIMO-in-Wi-Fi-6" target="_blank" rel="noopener">TechTarget: OFDMA vs. MU-MIMO in Wi-Fi 6</a></li>
+    <li><a href="https://www.ruijie.com/en-global/about/news/75663" target="_blank" rel="noopener">Ruijie: Wi-Fi 6 column</a></li>
+    <li><a href="https://arxiv.org/pdf/2010.11601" target="_blank" rel="noopener">arXiv: 5G vs Wi-Fi 6 (BSS color, TWT, OFDMA)</a></li>
+    <li><a href="https://www.spotipo.com/post/wifi-6-vs-wifi-5-for-2026" target="_blank" rel="noopener">Spotipo: Wi-Fi 6 vs Wi-Fi 5 for guest networks, 2026</a></li>
+    <li><a href="https://www.cisco.com/c/en/us/products/collateral/networking/wireless/wifi7-future-of-wireless-dg.html" target="_blank" rel="noopener">Cisco: Wi-Fi 7 design guide (TWT, WPA3)</a></li>
+    <li><a href="https://blog.espressif.com/leveraging-wi-fi-6-features-for-iot-applications-c23cc6a548aa" target="_blank" rel="noopener">Espressif: Wi-Fi 6 features for IoT</a></li>
+    <li><a href="https://www.hpe.com/emea_middle_east/en/what-is/wi-fi-6e.html" target="_blank" rel="noopener">HPE: What is Wi-Fi 6E</a></li>
+    <li><a href="https://www.data-alliance.net/blog/wi-fi-5-vs-wi-fi-6-vs-wi-fi-6e-vs-wi-fi-7-which-one-should-you-actually-deploy" target="_blank" rel="noopener">Data Alliance: Wi-Fi 5 vs 6 vs 6E vs 7 upgrade guide</a></li>
+    <li><a href="https://tech-insider.org/wifi-7-vs-wifi-6-2026/" target="_blank" rel="noopener">Tech Insider: Wi-Fi 7 vs Wi-Fi 6, 2026</a></li>
+  </ul>
+  <p class="note">Các con số về số thiết bị mỗi bộ phát và chênh lệch giá đến từ đơn vị triển khai, không phải tiêu chuẩn kỹ thuật. Thông tin tổng hợp tháng 10 năm 2026.</p>
+</footer>
+</div>
+
+<script>
+(function(){
+  var $=function(s){return document.querySelector(s)};
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
+
+  /* ---------- hero canvas ---------- */
+  var cv=$('#heroCv'),ctx=cv.getContext('2d'),mode='ax',N=16,devs=[];
+  for(var i=0;i<N;i++){devs.push({a:i/N*Math.PI*2+(i%2?0.2:0),r:i%2?0.86:0.58});}
+  var hAc=$('#hAc'),hAx=$('#hAx'),cap=$('#heroCap');
+  function setMode(m){
+    mode=m;
+    hAc.setAttribute('aria-pressed',m==='ac');hAx.setAttribute('aria-pressed',m==='ax');
+    cap.textContent=m==='ac'?'Mỗi lượt, bộ phát làm việc với 1 thiết bị. Các thiết bị còn lại chờ.':'Mỗi lượt, bộ phát chia kênh và phục vụ nhiều thiết bị cùng lúc. Hình minh hoạ.';
+    if(reduce)draw(0.5);
+  }
+  hAc.onclick=function(){setMode('ac')};hAx.onclick=function(){setMode('ax')};
+  function draw(t){
+    var W=cv.width,c=W/2,R=W*0.46;
+    ctx.clearRect(0,0,W,W);
+    var col=mode==='ax'?css('--ax'):css('--ac'),idle=css('--cell');
+    ctx.lineWidth=W*0.006;ctx.strokeStyle=col;
+    for(var k=0;k<3;k++){
+      var f=((t*0.35+k/3)%1);
+      ctx.globalAlpha=(1-f)*0.45;
+      ctx.beginPath();ctx.arc(c,c,f*R*0.9+W*0.05,0,Math.PI*2);ctx.stroke();
+    }
+    ctx.globalAlpha=1;
+    var slot=Math.floor(t*2),lit={};
+    if(mode==='ac'){lit[slot%N]=1}else{for(var j=0;j<4;j++){lit[(slot*4+j)%N]=1}}
+    for(var d=0;d<N;d++){
+      var x=c+Math.cos(devs[d].a)*R*devs[d].r,y=c+Math.sin(devs[d].a)*R*devs[d].r;
+      if(lit[d]){
+        ctx.strokeStyle=col;ctx.globalAlpha=.8;ctx.lineWidth=W*0.007;
+        ctx.beginPath();ctx.moveTo(c,c);ctx.lineTo(x,y);ctx.stroke();ctx.globalAlpha=1;
+      }
+      ctx.fillStyle=lit[d]?col:idle;
+      ctx.beginPath();ctx.arc(x,y,W*(lit[d]?0.03:0.022),0,Math.PI*2);ctx.fill();
+    }
+    ctx.fillStyle=col;ctx.beginPath();ctx.arc(c,c,W*0.045,0,Math.PI*2);ctx.fill();
+  }
+  function loop(ts){draw(ts/1000);requestAnimationFrame(loop)}
+  setMode('ax');
+  if(reduce){draw(0.5)}else{requestAnimationFrame(loop)}
+
+  /* ---------- airtime demo ---------- */
+  var range=$('#nDev'),acG=$('#acGrid'),axG=$('#axGrid'),timer=null;
+  function runDemo(){
+    clearInterval(timer);
+    var n=+range.value;
+    $('#nDevOut').textContent=n;
+    document.querySelectorAll('.nTxt').forEach(function(e){e.textContent=n});
+    [acG,axG].forEach(function(g){g.innerHTML='';for(var i=0;i<n;i++){var s=document.createElement('span');s.className='cell';g.appendChild(s)}});
+    var ac=[].slice.call(acG.children),ax=[].slice.call(axG.children);
+    var acSlots=n,axSlots=Math.ceil(n/4);
+    $('#acTime').textContent=acSlots;$('#axTime').textContent=axSlots;
+    var say=$('#demoSay');
+    if(n<=2){say.textContent='Với 1 đến 2 thiết bị, hai chuẩn gần như giống nhau. Chênh lệch chỉ lộ ra khi đông.'}
+    else{say.textContent='Với '+n+' thiết bị, khách cuối cùng ở Wi-Fi 6 chờ ít hơn khoảng '+Math.round((1-axSlots/acSlots)*100)+'% so với Wi-Fi 5 (trong mô hình này).'}
+    var tick=0;
+    function step(){
+      tick++;
+      if(tick<=acSlots)ac[tick-1].classList.add('done');
+      for(var j=0;j<4;j++){var c=ax[(tick-1)*4+j];if(c&&tick<=axSlots)c.classList.add('done')}
+      $('#acDone').textContent=Math.min(tick,acSlots);
+      $('#axDone').textContent=Math.min(tick*4,n);
+      if(tick>=acSlots)clearInterval(timer);
+    }
+    $('#acDone').textContent=0;$('#axDone').textContent=0;
+    if(reduce){ac.concat(ax).forEach(function(c){c.classList.add('done')});$('#acDone').textContent=n;$('#axDone').textContent=n;return}
+    timer=setInterval(step,200);
+  }
+  range.addEventListener('input',runDemo);$('#replay').onclick=runDemo;runDemo();
+
+  /* ---------- BSS coloring demo ---------- */
+  var tgl=$('#bssTgl'),gA=$('#gA'),gB=$('#gB'),phase=0,sa=0,sb=0,ticks=0,bt=null;
+  function bssRender(){
+    var on=tgl.checked;
+    $('#sentA').textContent=sa;$('#sentB').textContent=sb;
+    var mx=Math.max(ticks,1);
+    $('#barA').style.width=(sa/mx*100)+'%';$('#barB').style.width=(sb/mx*100)+'%';
+    $('#bssSay').textContent=on
+      ?'Đang bật: hai bộ phát nhận ra nhau khác màu nên phát cùng lúc. Mỗi bên dùng được gần hết thời gian.'
+      :'Đang tắt: hai bộ phát nghe thấy nhau và phải thay phiên. Mỗi bên chỉ dùng được khoảng một nửa thời gian.';
+  }
+  function bssStep(){
+    var on=tgl.checked;ticks++;
+    var ta=on||phase%2===0,tb=on||phase%2===1;phase++;
+    if(ta)sa++;if(tb)sb++;
+    gA.setAttribute('data-talk',ta?'1':'0');gB.setAttribute('data-talk',tb?'1':'0');
+    bssRender();
+  }
+  function bssReset(){
+    sa=sb=ticks=phase=0;bssRender();
+    if(reduce){for(var i=0;i<10;i++)bssStep();gA.setAttribute('data-talk','1');gB.setAttribute('data-talk',tgl.checked?'1':'0')}
+  }
+  tgl.addEventListener('change',bssReset);
+  bssReset();
+  if(!reduce){bssStep();bt=setInterval(bssStep,700)}
+
+  /* ---------- advisor ---------- */
+  var qT=$('#qTotal'),qA=$('#qAp');
+  function val(n){var e=document.querySelector('input[name="'+n+'"]:checked');return e?e.value:''}
+  function advise(){
+    var total=+qT.value,ap=+qA.value;
+    $('#qTotalOut').textContent=total;$('#qApOut').textContent=ap;
+    var per=Math.round(total/ap),venue=val('venue'),budget=val('budget');
+    var video=$('#qVideo').checked,iot=$('#qIot').checked,long=$('#qLong').checked;
+    var score=0,why=[];
+    if(per<=30){why.push('Khoảng '+per+' thiết bị mỗi bộ phát nằm trong mức Wi-Fi 5 xử lý thoải mái.')}
+    else if(per<=40){score+=1;why.push('Khoảng '+per+' thiết bị mỗi bộ phát đã chạm ngưỡng Wi-Fi 5 bắt đầu chậm lại.')}
+    else if(per<=60){score+=2;why.push('Khoảng '+per+' thiết bị mỗi bộ phát là mức Wi-Fi 5 dễ tắc ở giờ cao điểm.')}
+    else{score+=3;why.push('Khoảng '+per+' thiết bị mỗi bộ phát là rất đông. Đây là chỗ Wi-Fi 6 được thiết kế cho.')}
+    if(video){score+=1;why.push('Họp video gửi dữ liệu lên liên tục. MU-MIMO hai chiều của Wi-Fi 6 giúp phần này.')}
+    if(iot){score+=1;why.push('Nhiều thiết bị nhỏ chạy pin hưởng lợi từ TWT, và OFDMA phục vụ các gói dữ liệu nhỏ hiệu quả hơn.')}
+    if(venue==='hotel'){score+=1;why.push('Khách sạn có thêm TV, khoá cửa, cảm biến trong từng phòng nên số thiết bị tăng nhanh.')}
+    if(long){score+=1;why.push('Dùng trên 5 năm thì nên chọn chuẩn mới hơn để khỏi thay sớm.')}
+    if(budget==='tight'){score-=1;why.push('Ngân sách chặt: bộ phát Wi-Fi 5 rẻ hơn, hợp lý nếu nhu cầu chưa đông.')}
+    if(budget==='flex'){score+=1;why.push('Ngân sách thoải mái nên chênh giá bộ phát ít là vấn đề.')}
+    var r,title;
+    if(score<=1){r='ac';title='Wi-Fi 5 đủ dùng'}
+    else if(score<=3){r='mid';title='Cân nhắc Wi-Fi 6'}
+    else{r='ax';title='Nên chọn Wi-Fi 6'}
+    var res=$('#result');res.setAttribute('data-r',r);
+    $('#rTitle').textContent=title;
+    var minAc=Math.ceil(total/30),minAx=Math.ceil(total/60);
+    $('#rMeta').textContent='~'+per+' thiết bị mỗi bộ phát · tối thiểu theo số thiết bị: '+minAc+' bộ phát Wi-Fi 5, hoặc '+minAx+' bộ phát Wi-Fi 6';
+    var ul=$('#rWhy');ul.innerHTML='';
+    why.forEach(function(w){var li=document.createElement('li');li.textContent=w;ul.appendChild(li)});
+  }
+  document.querySelectorAll('#chon input').forEach(function(e){e.addEventListener('input',advise);e.addEventListener('change',advise)});
+  advise();
+})();
+</script>
+
+</body></html>
