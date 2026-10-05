@@ -358,7 +358,7 @@ footer ul{margin:0;padding-left:1.2em;font-size:.88rem;color:var(--muted);displa
         </div>
       </fieldset>
       <fieldset>
-        <legend>Giờ đông nhất, tổng số thiết bị dùng cùng lúc</legend>
+        <legend>Giờ cao điểm, tổng số thiết bị dùng cùng lúc</legend>
         <div class="row"><input id="qTotal" type="range" min="5" max="400" step="5" value="80"><span class="val" id="qTotalOut">80</span></div>
       </fieldset>
       <fieldset>
@@ -366,9 +366,14 @@ footer ul{margin:0;padding-left:1.2em;font-size:.88rem;color:var(--muted);displa
         <div class="row"><input id="qAp" type="range" min="1" max="20" value="3"><span class="val" id="qApOut">3</span></div>
       </fieldset>
       <fieldset>
+        <legend>Mức độ nhiễu (số bộ phát Wifi 5 xung quanh)</legend>
+        <div class="row"><input id="qNoise" type="range" min="1" max="30" value="5"><span class="val" id="qNoiseOut">5</span></div>
+      </fieldset>
+      <fieldset>
         <legend>Thêm thông tin</legend>
         <div class="checks">
           <label for="qVideo"><input type="checkbox" id="qVideo"><span>Thường có họp hoặc gọi video</span></label>
+          <label for="qGame"><input type="checkbox" id="qGame"><span>Thường có chơi game</span></label>
           <label for="qIot"><input type="checkbox" id="qIot"><span>Nhiều camera, khoá cửa, cảm biến, máy thanh toán</span></label>
           <label for="qLong"><input type="checkbox" id="qLong"><span>Muốn dùng hạ tầng này từ 5 năm trở lên</span></label>
         </div>
@@ -421,22 +426,6 @@ footer ul{margin:0;padding-left:1.2em;font-size:.88rem;color:var(--muted);displa
   </div>
 </section>
 
-<footer>
-  <span class="eyebrow">Nguồn tham khảo</span>
-  <ul>
-    <li><a href="https://www.tp-link.com/us/blog/2479/wi-fi-5-vs-wi-fi-6-what-s-different-and-is-it-worth-upgrading-/" target="_blank" rel="noopener">TP-Link: Wi-Fi 5 vs. Wi-Fi 6, what's different</a></li>
-    <li><a href="https://www.techtarget.com/searchnetworking/answer/Whats-the-difference-between-OFDMA-vs-MU-MIMO-in-Wi-Fi-6" target="_blank" rel="noopener">TechTarget: OFDMA vs. MU-MIMO in Wi-Fi 6</a></li>
-    <li><a href="https://www.ruijie.com/en-global/about/news/75663" target="_blank" rel="noopener">Ruijie: Wi-Fi 6 column</a></li>
-    <li><a href="https://arxiv.org/pdf/2010.11601" target="_blank" rel="noopener">arXiv: 5G vs Wi-Fi 6 (BSS color, TWT, OFDMA)</a></li>
-    <li><a href="https://www.spotipo.com/post/wifi-6-vs-wifi-5-for-2026" target="_blank" rel="noopener">Spotipo: Wi-Fi 6 vs Wi-Fi 5 for guest networks, 2026</a></li>
-    <li><a href="https://www.cisco.com/c/en/us/products/collateral/networking/wireless/wifi7-future-of-wireless-dg.html" target="_blank" rel="noopener">Cisco: Wi-Fi 7 design guide (TWT, WPA3)</a></li>
-    <li><a href="https://blog.espressif.com/leveraging-wi-fi-6-features-for-iot-applications-c23cc6a548aa" target="_blank" rel="noopener">Espressif: Wi-Fi 6 features for IoT</a></li>
-    <li><a href="https://www.hpe.com/emea_middle_east/en/what-is/wi-fi-6e.html" target="_blank" rel="noopener">HPE: What is Wi-Fi 6E</a></li>
-    <li><a href="https://www.data-alliance.net/blog/wi-fi-5-vs-wi-fi-6-vs-wi-fi-6e-vs-wi-fi-7-which-one-should-you-actually-deploy" target="_blank" rel="noopener">Data Alliance: Wi-Fi 5 vs 6 vs 6E vs 7 upgrade guide</a></li>
-    <li><a href="https://tech-insider.org/wifi-7-vs-wifi-6-2026/" target="_blank" rel="noopener">Tech Insider: Wi-Fi 7 vs Wi-Fi 6, 2026</a></li>
-  </ul>
-  <p class="note">Các con số về số thiết bị mỗi bộ phát và chênh lệch giá đến từ đơn vị triển khai, không phải tiêu chuẩn kỹ thuật. Thông tin tổng hợp tháng 10 năm 2026.</p>
-</footer>
 </div>
 
 <script>
@@ -540,19 +529,32 @@ footer ul{margin:0;padding-left:1.2em;font-size:.88rem;color:var(--muted);displa
   if(!reduce){bssStep();bt=setInterval(bssStep,700)}
 
   /* ---------- advisor ---------- */
-  var qT=$('#qTotal'),qA=$('#qAp');
+  var qT=$('#qTotal'),qA=$('#qAp'),qN=$('#qNoise');
   function val(n){var e=document.querySelector('input[name="'+n+'"]:checked');return e?e.value:''}
   function advise(){
-    var total=+qT.value,ap=+qA.value;
-    $('#qTotalOut').textContent=total;$('#qApOut').textContent=ap;
+    var total=+qT.value,ap=+qA.value,noise=+qN.value;
+    $('#qTotalOut').textContent=total;$('#qApOut').textContent=ap;$('#qNoiseOut').textContent=noise;
     var per=Math.round(total/ap),venue=val('venue'),budget=val('budget');
-    var video=$('#qVideo').checked,iot=$('#qIot').checked,long=$('#qLong').checked;
+    var video=$('#qVideo').checked,game=$('#qGame').checked,iot=$('#qIot').checked,long=$('#qLong').checked;
     var score=0,why=[];
     if(per<=30){why.push('Khoảng '+per+' thiết bị mỗi bộ phát nằm trong mức Wi-Fi 5 xử lý thoải mái.')}
     else if(per<=40){score+=1;why.push('Khoảng '+per+' thiết bị mỗi bộ phát đã chạm ngưỡng Wi-Fi 5 bắt đầu chậm lại.')}
     else if(per<=60){score+=2;why.push('Khoảng '+per+' thiết bị mỗi bộ phát là mức Wi-Fi 5 dễ tắc ở giờ cao điểm.')}
     else{score+=3;why.push('Khoảng '+per+' thiết bị mỗi bộ phát là rất đông. Đây là chỗ Wi-Fi 6 được thiết kế cho.')}
+    
+    // Logic đánh giá mức độ nhiễu xung quanh
+    if(noise <= 5){
+      why.push('Mức độ nhiễu thấp ('+noise+' bộ phát xung quanh): Sóng khá thoáng, Wi-Fi 5 ít bị ảnh hưởng bởi tạp âm từ bên ngoài.');
+    } else if(noise <= 15){
+      score += 1;
+      why.push('Mức độ nhiễu trung bình ('+noise+' bộ phát xung quanh): Có sự cạnh tranh sóng đáng kể, Wi-Fi 6 với BSS Coloring sẽ giúp giảm nhiễu tốt hơn.');
+    } else {
+      score += 2;
+      why.push('Mức độ nhiễu cao ('+noise+' bộ phát xung quanh): Mật độ sóng dày đặc. Rất nên dùng Wi-Fi 6 để tận dụng tính năng BSS Coloring phân định tín hiệu, tránh nghẽn mạng.');
+    }
+
     if(video){score+=1;why.push('Họp video gửi dữ liệu lên liên tục. MU-MIMO hai chiều của Wi-Fi 6 giúp phần này.')}
+    if(game){score+=1;why.push('Chơi game cần độ trễ thấp và ổn định. Wi-Fi 6 với OFDMA và MU-MIMO giúp giảm giật lag khi có nhiều thiết bị dùng chung mạng.')}
     if(iot){score+=1;why.push('Nhiều thiết bị nhỏ chạy pin hưởng lợi từ TWT, và OFDMA phục vụ các gói dữ liệu nhỏ hiệu quả hơn.')}
     if(venue==='hotel'){score+=1;why.push('Khách sạn có thêm TV, khoá cửa, cảm biến trong từng phòng nên số thiết bị tăng nhanh.')}
     if(long){score+=1;why.push('Dùng trên 5 năm thì nên chọn chuẩn mới hơn để khỏi thay sớm.')}
